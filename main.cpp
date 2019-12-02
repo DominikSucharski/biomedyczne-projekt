@@ -12,6 +12,9 @@ void detectAndDraw(Mat& img, CascadeClassifier& cascade,
   double scale, bool tryflip);
 string cascadeName;
 string nestedCascadeName;
+
+
+
 int main(int argc, const char** argv)
 {
   Mat frame, image;
