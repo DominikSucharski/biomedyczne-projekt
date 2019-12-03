@@ -3,8 +3,9 @@
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/videoio.hpp"
-#include "pomiar_karty.h"
 #include <iostream>
+
+#include "pomiar_karty.h"
 
 
 PomiarKarty::PomiarKarty()

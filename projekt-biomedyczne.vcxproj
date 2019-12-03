@@ -127,9 +127,11 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pomiar_karty.cpp" />
+    <ClCompile Include="wykrywanie_oczu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pomiar_karty.h" />
+    <ClInclude Include="wykrywanie_oczu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

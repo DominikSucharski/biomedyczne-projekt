@@ -21,9 +21,15 @@
     <ClCompile Include="pomiar_karty.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="wykrywanie_oczu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pomiar_karty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wykrywanie_oczu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
