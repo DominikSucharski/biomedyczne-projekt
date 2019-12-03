@@ -107,10 +107,8 @@ int wykrywanieOczu::wykryj_i_rysuj(Mat & img, CascadeClassifier & cascade, Casca
       temp << diff_x;
       putText(img, "Odleglosc miedzy oczami: " + temp.str() + "px", Point(50, 100), cv::FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
 
-      imshow("result", img);
       return diff_x;
     }
   }
-  imshow("result", img);
   return 0;
 }

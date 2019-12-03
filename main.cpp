@@ -17,7 +17,7 @@ string nestedCascadeName;
 
 int main(int argc, const char** argv)
 {
-  vector<Point> approx;
+  vector<Point> approx;  // ramka zaznaczaj¹ca obiekt referencyjny
   Mat frame;  // klatka obrazu
   CascadeClassifier cascade, nestedCascade;
   double scale =  1.0;  // skala
@@ -59,25 +59,29 @@ int main(int argc, const char** argv)
     capture >> frame;  // zapisanie obrazu z kamery
     if (frame.empty())
       break;
-    Mat frame1 = frame.clone();
+    Mat frame1 = frame.clone();  // kopia ramki do zaznaczenia twarzy i oczu
 
     wykrywanieOczu wykrywanie_oczu;
     int odleglosc_miedzy_zrenicami_px = wykrywanie_oczu.wykryj_i_rysuj(frame1, cascade, nestedCascade, scale);
     
 
     if (odleglosc_miedzy_zrenicami_px > 0) {
-      frame1 = frame.clone();
+      Mat frame2 = frame.clone();  // kopia ramki do wykrywania karty
       PomiarKarty pomiar_karty;
-      int rozmiar_karty_px = pomiar_karty.WykonajPomiar(frame1, approx);
+      int rozmiar_karty_px = pomiar_karty.WykonajPomiar(frame2, approx);
 
       if (rozmiar_karty_px > 0) {
+        if (approx.size() > 1) {
+          rectangle(frame1, approx[0], approx[1], (0, 0, 0), 2, 8, 0);  // zaznaczenie karty na ramce z zaznaczonymi twarzami
+        }
         double odleglosc_zrenic = (odleglosc_miedzy_zrenicami_px * rozmiar_karty_mm) / rozmiar_karty_px;
         cout << "odleglosc zrenic = " << odleglosc_zrenic;
         cout << " mm" << endl;
       }
-
     }
-   
+
+    imshow("result", frame1);
+
 
     char c = (char)waitKey(10);
     if (c == 27 || c == 'q' || c == 'Q')
