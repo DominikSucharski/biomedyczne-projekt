@@ -60,6 +60,7 @@ int main(int argc, const char** argv)
     Mat frame1 = frame.clone();
 
 
+    /*
     wykrywanieOczu wykrywanie_oczu;
     int odleglosc_miedzy_zrenicami_px = wykrywanie_oczu.wykryj_i_rysuj(frame1, cascade, nestedCascade, scale);
 
@@ -71,6 +72,9 @@ int main(int argc, const char** argv)
       PomiarKarty pomiar_karty;
       int rozmiar_karty_px = pomiar_karty.WykonajPomiar(frame1);
     }
+    */
+    PomiarKarty pomiar_karty;
+    int rozmiar_karty_px = pomiar_karty.WykonajPomiar(frame1);
 
 
     char c = (char)waitKey(10);
