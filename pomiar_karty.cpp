@@ -21,7 +21,7 @@ double angle(cv::Point pt1, cv::Point pt2, cv::Point pt0) {
 	return (dx1*dx2 + dy1 * dy2) / sqrt((dx1*dx1 + dy1 * dy1)*(dx2*dx2 + dy2 * dy2) + 1e-10);
 }
 
-int PomiarKarty::WykonajPomiar(Mat& image)
+int PomiarKarty::WykonajPomiar(Mat& image, vector<Point>& approx)
 {
 	// blur will enhance edge detection
 	Mat blurred(image);
@@ -58,7 +58,6 @@ int PomiarKarty::WykonajPomiar(Mat& image)
 			findContours(gray, contours, RETR_LIST, CHAIN_APPROX_SIMPLE);
 			
 			// Test contours
-			vector<Point> approx;
 			for (size_t i = 0; i < contours.size(); i++)
 			{
 				// approximate contour with accuracy proportional
@@ -86,7 +85,7 @@ int PomiarKarty::WykonajPomiar(Mat& image)
 					}
 				}
 			}
-			rectangle(image, approx[0], approx[1], (0, 0, 0), 1, 8, 0);
+			//rectangle(image, approx[0], approx[1], (0, 0, 0), 1, 8, 0);
 		}
 	}
 	return 0;

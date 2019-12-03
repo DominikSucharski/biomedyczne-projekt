@@ -17,6 +17,7 @@ string nestedCascadeName;
 
 int main(int argc, const char** argv)
 {
+  vector<Point> approx;
   Mat frame;  // klatka obrazu
   CascadeClassifier cascade, nestedCascade;
   double scale =  1.0;  // skala
@@ -67,7 +68,7 @@ int main(int argc, const char** argv)
     if (odleglosc_miedzy_zrenicami_px > 0) {
       frame1 = frame.clone();
       PomiarKarty pomiar_karty;
-      int rozmiar_karty_px = pomiar_karty.WykonajPomiar(frame1);
+      int rozmiar_karty_px = pomiar_karty.WykonajPomiar(frame1, approx);
 
       if (rozmiar_karty_px > 0) {
         double odleglosc_zrenic = (odleglosc_miedzy_zrenicami_px * rozmiar_karty_mm) / rozmiar_karty_px;

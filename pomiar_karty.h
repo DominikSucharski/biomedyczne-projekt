@@ -12,6 +12,6 @@ public:
   /*
   Funkcja zwraca szerokoœæ obiektu referencyjnego (karty) wyra¿on¹ w pixelach.
   */
-  int WykonajPomiar(Mat& image);
+  int WykonajPomiar(Mat& image, vector<Point>& approx);
 };
 
