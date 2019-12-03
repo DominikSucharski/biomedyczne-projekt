@@ -20,6 +20,7 @@ int main(int argc, const char** argv)
   Mat frame;  // klatka obrazu
   CascadeClassifier cascade, nestedCascade;
   double scale =  1.0;  // skala
+  double rozmiar_karty_mm = 85.60;  // d³ugoœæ d³u¿szego boku karty p³atniczej
   
 
   // przetwarzanie parametów
@@ -59,23 +60,23 @@ int main(int argc, const char** argv)
       break;
     Mat frame1 = frame.clone();
 
-
-    /*
     wykrywanieOczu wykrywanie_oczu;
     int odleglosc_miedzy_zrenicami_px = wykrywanie_oczu.wykryj_i_rysuj(frame1, cascade, nestedCascade, scale);
+    
 
     if (odleglosc_miedzy_zrenicami_px > 0) {
-      cout << "Odleglosc miedzy oczami: ";
-      cout << odleglosc_miedzy_zrenicami_px;
-      cout << "px" << endl;
       frame1 = frame.clone();
       PomiarKarty pomiar_karty;
       int rozmiar_karty_px = pomiar_karty.WykonajPomiar(frame1);
-    }
-    */
-    PomiarKarty pomiar_karty;
-    int rozmiar_karty_px = pomiar_karty.WykonajPomiar(frame1);
 
+      if (rozmiar_karty_px > 0) {
+        double odleglosc_zrenic = (odleglosc_miedzy_zrenicami_px * rozmiar_karty_mm) / rozmiar_karty_px;
+        cout << "odleglosc zrenic = " << odleglosc_zrenic;
+        cout << " mm" << endl;
+      }
+
+    }
+   
 
     char c = (char)waitKey(10);
     if (c == 27 || c == 'q' || c == 'Q')
