@@ -67,9 +67,9 @@ int main(int argc, const char** argv)
       cout << "Odleglosc miedzy oczami: ";
       cout << odleglosc_miedzy_zrenicami_px;
       cout << "px" << endl;
-      Mat frame2 = frame.clone();
+      frame1 = frame.clone();
       PomiarKarty pomiar_karty;
-      int rozmiar_karty_px = pomiar_karty.WykonajPomiar(frame2);
+      int rozmiar_karty_px = pomiar_karty.WykonajPomiar(frame1);
     }
 
 
