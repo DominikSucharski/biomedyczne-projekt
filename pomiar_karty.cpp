@@ -23,8 +23,6 @@ double angle(cv::Point pt1, cv::Point pt2, cv::Point pt0) {
 
 int PomiarKarty::WykonajPomiar(Mat& image)
 {
-	cout << "Pomiar karty..." << endl;
-
 	// blur will enhance edge detection
 	Mat blurred(image);
 	medianBlur(image, blurred, 9);

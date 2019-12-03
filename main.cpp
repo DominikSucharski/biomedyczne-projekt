@@ -20,7 +20,7 @@ int main(int argc, const char** argv)
   Mat frame;  // klatka obrazu
   CascadeClassifier cascade, nestedCascade;
   double scale =  1.0;  // skala
-  double rozmiar_karty_mm = 50;
+  double rozmiar_karty_mm = 85.60;  // d³ugoœæ d³u¿szego boku karty p³atniczej
   
 
   // przetwarzanie parametów
@@ -65,9 +65,6 @@ int main(int argc, const char** argv)
     
 
     if (odleglosc_miedzy_zrenicami_px > 0) {
-      cout << "Odleglosc miedzy oczami: ";
-      cout << odleglosc_miedzy_zrenicami_px;
-      cout << "px" << endl;
       frame1 = frame.clone();
       PomiarKarty pomiar_karty;
       int rozmiar_karty_px = pomiar_karty.WykonajPomiar(frame1);
