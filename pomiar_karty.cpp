@@ -88,6 +88,7 @@ int PomiarKarty::WykonajPomiar(Mat& image)
 					}
 				}
 			}
+			rectangle(image, approx[0], approx[1], (0, 0, 0), 1, 8, 0);
 		}
 	}
 	return 0;
