@@ -58,11 +58,7 @@ int PomiarKarty::WykonajPomiar(Mat& image)
 
 			// Find contours and store them in a list
 			findContours(gray, contours, RETR_LIST, CHAIN_APPROX_SIMPLE);
-
-			double max_area = 0;
-			int square_id = 0;
-			vector<Point> max_approx;
-
+			
 			// Test contours
 			vector<Point> approx;
 			for (size_t i = 0; i < contours.size(); i++)
@@ -75,12 +71,7 @@ int PomiarKarty::WykonajPomiar(Mat& image)
 				// area may be positive or negative - in accordance with the
 				// contour orientation
 				if (approx.size() == 4 && fabs(contourArea(Mat(approx))) > 1000 && isContourConvex(Mat(approx))) {
-					double area = fabs(contourArea(Mat(approx)));
-
-					if (area > max_area) {
-						square_id = (int)i;
-						max_area = area;
-					}
+			
 					double maxCosine = 0;
 
 					for (int j = 2; j < 5; j++)
