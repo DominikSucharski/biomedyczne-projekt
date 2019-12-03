@@ -70,7 +70,8 @@ int PomiarKarty::WykonajPomiar(Mat& image)
 				// Note: absolute value of an area is used because
 				// area may be positive or negative - in accordance with the
 				// contour orientation
-				if (approx.size() == 4 && fabs(contourArea(Mat(approx))) > 1000 && isContourConvex(Mat(approx))) {
+				if (approx.size() == 4 && fabs(contourArea(Mat(approx))) > 1000 && isContourConvex(Mat(approx))) 
+				{
 			
 					double maxCosine = 0;
 
@@ -80,9 +81,11 @@ int PomiarKarty::WykonajPomiar(Mat& image)
 						maxCosine = MAX(maxCosine, cosine);
 					}
 
-					if (maxCosine < 0.3)
-						if (approx[i].x == approx[i + 1].x) return abs(approx[i].x - approx[i + 2].x) + abs(approx[i].y - approx[i + 2].y);
-						else return abs(approx[i].x - approx[i + 1].x) + abs(approx[i].y - approx[i + 1].y);
+					if (maxCosine < 0.3) {
+						int v3 = abs(approx[0].x - approx[2].x) + abs(approx[0].y - approx[2].y);
+						int v2 = abs(approx[0].x - approx[1].x) + abs(approx[0].y - approx[1].y);
+						return min(v3, v2);
+					}
 				}
 			}
 		}
