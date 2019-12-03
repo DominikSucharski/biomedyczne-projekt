@@ -126,6 +126,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="pomiar_karty.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pomiar_karty.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

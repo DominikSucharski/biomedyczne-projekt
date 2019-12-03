@@ -1,41 +1,42 @@
-//#include<opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
 #include "opencv2/objdetect.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/videoio.hpp"
+#include "pomiar_karty.h"
 #include <iostream>
 
 using namespace std;
 using namespace cv;
 
 
-void detectAndDraw(Mat& img, CascadeClassifier& cascade, CascadeClassifier& nestedCascade, double scale, bool tryflip);
+void detectAndDraw(Mat& img, CascadeClassifier& cascade, CascadeClassifier& nestedCascade, double scale);
+void find_squares(Mat& image, vector<vector<Point> >& squares);
+
+
+
 string cascadeName;
 string nestedCascadeName;
 
 
 int main(int argc, const char** argv)
 {
+
+
   Mat frame, image;
-  string inputName;
-  bool tryflip;
   CascadeClassifier cascade, nestedCascade;
   double scale =  1.0;
-  int id_kamery = 2;
+  int id_kamery = 0;
 
   VideoCapture capture(id_kamery);  // otwarcie kamery o id id_kamery
 
 
   cv::CommandLineParser parser(argc, argv,
-    "{help h||}"
     "{cascade|data/haarcascades/haarcascade_frontalface_alt.xml|}"
     "{nested-cascade|data/haarcascades/haarcascade_eye_tree_eyeglasses.xml|}"
-    "{scale|1|}{try-flip||}{@filename||}"
   );
   cascadeName = parser.get<string>("cascade");
   nestedCascadeName = parser.get<string>("nested-cascade");
-  tryflip = parser.has("try-flip");
-  inputName = parser.get<string>("@filename");
   if (!parser.check())
   {
     parser.printErrors();
@@ -71,7 +72,7 @@ int main(int argc, const char** argv)
       if (frame.empty())
         break;
       Mat frame1 = frame.clone();
-      detectAndDraw(frame1, cascade, nestedCascade, scale, tryflip);
+      detectAndDraw(frame1, cascade, nestedCascade, scale);
       char c = (char)waitKey(10);
       if (c == 27 || c == 'q' || c == 'Q')
         break;
@@ -82,7 +83,7 @@ int main(int argc, const char** argv)
 
 
 
-void detectAndDraw(Mat& img, CascadeClassifier& cascade, CascadeClassifier& nestedCascade, double scale, bool tryflip) {
+void detectAndDraw(Mat& img, CascadeClassifier& cascade, CascadeClassifier& nestedCascade, double scale) {
   double t = 0;
   vector<Rect> faces, faces2;
   const static Scalar colors[] =
@@ -102,30 +103,20 @@ void detectAndDraw(Mat& img, CascadeClassifier& cascade, CascadeClassifier& nest
   resize(gray, smallImg, Size(), fx, fx, INTER_LINEAR_EXACT);
   equalizeHist(smallImg, smallImg);
   t = (double)getTickCount();
+
+  // wykrywanie twarzy
   cascade.detectMultiScale(smallImg, faces,
     1.1, 2, 0
     //|CASCADE_FIND_BIGGEST_OBJECT
     //|CASCADE_DO_ROUGH_SEARCH
     | CASCADE_SCALE_IMAGE,
     Size(30, 30));
-  if (tryflip)
-  {
-    flip(smallImg, smallImg, 1);
-    cascade.detectMultiScale(smallImg, faces2,
-      1.1, 2, 0
-      //|CASCADE_FIND_BIGGEST_OBJECT
-      //|CASCADE_DO_ROUGH_SEARCH
-      | CASCADE_SCALE_IMAGE,
-      Size(30, 30));
-    for (vector<Rect>::const_iterator r = faces2.begin(); r != faces2.end(); ++r)
-    {
-      faces.push_back(Rect(smallImg.cols - r->x - r->width, r->y, r->width, r->height));
-    }
-  }
+  
   t = (double)getTickCount() - t;
   // printf("detection time = %g ms\n", t * 1000 / getTickFrequency());
   for (size_t i = 0; i < faces.size(); i++)
   {
+    if (i > 0) break;  // wykorzystanie tylko pierwszej wykrytej twarzy
     Rect r = faces[i];
     Mat smallImgROI;
     vector<Rect> nestedObjects;
@@ -175,9 +166,13 @@ void detectAndDraw(Mat& img, CascadeClassifier& cascade, CascadeClassifier& nest
     else if(nestedObjects.size() < 2) putText(img, "Wykryto jedno oko", Point(50, 100), cv::FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
     else {
       int diff_x = abs(oko1.x - oko2.x);
+      
+      PomiarKarty pomiar_karty;
+      int rozmiar_karty_px = pomiar_karty.WykonajPomiar(img);
+
       stringstream temp;
       temp << diff_x;
-      putText(img, "Odleglosc miedzy oczami: " + temp.str() + "px", Point(50, 100), cv::FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0));
+      putText(img, "Odleglosc miedzy oczami: " + temp.str() + "px", Point(50, 100), cv::FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
       cout << "Odleglosc miedzy oczami: " + temp.str() + "px" << endl;
     }
   }
