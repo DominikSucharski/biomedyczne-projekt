@@ -9,18 +9,14 @@
 #include "wykrywanie_oczu.h"
 
 
-wykrywanieOczu::wykrywanieOczu()
-{
-}
+wykrywanieOczu::wykrywanieOczu() {}
 
 
-wykrywanieOczu::~wykrywanieOczu()
-{
-}
+wykrywanieOczu::~wykrywanieOczu() {}
+
 
 int wykrywanieOczu::wykryj_i_rysuj(Mat & img, CascadeClassifier & cascade, CascadeClassifier & nestedCascade, double scale)
 {
-  double t = 0;
   vector<Rect> faces, faces2;
   const static Scalar colors[] =
   {
@@ -38,7 +34,6 @@ int wykrywanieOczu::wykryj_i_rysuj(Mat & img, CascadeClassifier & cascade, Casca
   double fx = 1 / scale;
   resize(gray, smallImg, Size(), fx, fx, INTER_LINEAR_EXACT);
   equalizeHist(smallImg, smallImg);
-  t = (double)getTickCount();
 
   // wykrywanie twarzy
   cascade.detectMultiScale(smallImg, faces,
@@ -48,8 +43,6 @@ int wykrywanieOczu::wykryj_i_rysuj(Mat & img, CascadeClassifier & cascade, Casca
     | CASCADE_SCALE_IMAGE,
     Size(30, 30));
 
-  t = (double)getTickCount() - t;
-  // printf("detection time = %g ms\n", t * 1000 / getTickFrequency());
   for (size_t i = 0; i < faces.size(); i++)
   {
     if (i > 0) break;  // wykorzystanie tylko pierwszej wykrytej twarzy
@@ -101,12 +94,9 @@ int wykrywanieOczu::wykryj_i_rysuj(Mat & img, CascadeClassifier & cascade, Casca
     if (nestedObjects.size() < 1) putText(img, "Nie wykryto oczu", Point(50, 100), cv::FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
     else if (nestedObjects.size() < 2) putText(img, "Wykryto jedno oko", Point(50, 100), cv::FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
     else {
+      putText(img, "Zmierzono odleglosc", Point(50, 100), cv::FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
+
       int diff_x = abs(oko1.x - oko2.x);
-
-      stringstream temp;
-      temp << diff_x;
-      putText(img, "Odleglosc miedzy oczami: " + temp.str() + "px", Point(50, 100), cv::FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
-
       return diff_x;
     }
   }
