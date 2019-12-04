@@ -72,9 +72,13 @@ int main(int argc, const char** argv)
 
       if (rozmiar_karty_px > 0) {
         double odleglosc_zrenic = (odleglosc_miedzy_zrenicami_px * rozmiar_karty_mm) / rozmiar_karty_px;
-        cout << "odleglosc zrenic = " << odleglosc_zrenic;
-        cout << " mm" << endl;
+        if ((odleglosc_zrenic < 50.0) || (odleglosc_zrenic > 80.0)) cout << "niepoprawny pomiar" << endl;
+        else {
+          cout << "odleglosc zrenic = " << odleglosc_zrenic;
+          cout << " mm" << endl;
+        }
       }
+
     }
 
 
