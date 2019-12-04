@@ -19,7 +19,7 @@ double angle(cv::Point pt1, cv::Point pt2, cv::Point pt0) {
 	return (dx1*dx2 + dy1 * dy2) / sqrt((dx1*dx1 + dy1 * dy1)*(dx2*dx2 + dy2 * dy2) + 1e-10);
 }
 
-int PomiarKarty::WykonajPomiar(Mat& image)
+int PomiarKarty::WykonajPomiar(Mat& image, vector<Point>& approx)
 {
 	// poprawienie detekcji krawedzi
 	Mat blurred(image);
@@ -34,7 +34,7 @@ int PomiarKarty::WykonajPomiar(Mat& image)
 		int ch[] = { c, 0 };
 		mixChannels(&blurred, 1, &gray0, 1, ch, 1);
 
-		// try several threshold levels
+		//sprawdzenie roznych poziomow przyciemnienia kartki
 		const int threshold_level = 2;
 		for (int l = 0; l < threshold_level; l++)
 		{
@@ -57,21 +57,9 @@ int PomiarKarty::WykonajPomiar(Mat& image)
 			// kontury
 			for (size_t i = 0; i < contours.size(); i++)
 			{
-<<<<<<< HEAD
-				
 				approxPolyDP(Mat(contours[i]), approx, arcLength(Mat(contours[i]), true)*0.02, true);
 
-				if (approx.size() == 4 && fabs(contourArea(Mat(approx))) > 1000 && isContourConvex(Mat(approx))) 
-=======
-				// approximate contour with accuracy proportional
-				// to the contour perimeter
-				approxPolyDP(Mat(contours[i]), this->approx, arcLength(Mat(contours[i]), true)*0.02, true);
-
-				// Note: absolute value of an area is used because
-				// area may be positive or negative - in accordance with the
-				// contour orientation
 				if (this->approx.size() == 4 && fabs(contourArea(Mat(this->approx))) > 1000 && isContourConvex(Mat(this->approx)))
->>>>>>> 321da8c4a30b275e334b6928e0e0a754f384920a
 				{
 					double maxCosine = 0;
 					for (int j = 2; j < 5; j++)

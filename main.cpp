@@ -18,6 +18,7 @@ string nestedCascadeName;
 int main(int argc, const char** argv)
 {
   Mat frame;  // klatka obrazu
+  vector<Point> approx;
   CascadeClassifier cascade, nestedCascade;
   double scale =  1.0;  // skala
   double rozmiar_karty_mm = 85.60;  // d³ugoœæ d³u¿szego boku karty p³atniczej
@@ -67,7 +68,7 @@ int main(int argc, const char** argv)
     if (odleglosc_miedzy_zrenicami_px > 0) {
       Mat frame2 = frame.clone();  // kopia ramki do wykrywania karty
       PomiarKarty pomiar_karty;
-      int rozmiar_karty_px = pomiar_karty.WykonajPomiar(frame2);
+      int rozmiar_karty_px = pomiar_karty.WykonajPomiar(frame2, approx);
       pomiar_karty.ZaznaczNaRamce(frame1);
 
       if (rozmiar_karty_px > 0) {
