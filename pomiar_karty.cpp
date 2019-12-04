@@ -9,7 +9,7 @@
 
 
 PomiarKarty::PomiarKarty() {}
-PomiarKarty::~PomiarKarty() {}
+PomiarKarty::~PomiarKarty(){}
 
 double angle(cv::Point pt1, cv::Point pt2, cv::Point pt0) {
 	double dx1 = pt1.x - pt0.x;
@@ -19,31 +19,32 @@ double angle(cv::Point pt1, cv::Point pt2, cv::Point pt0) {
 	return (dx1*dx2 + dy1 * dy2) / sqrt((dx1*dx1 + dy1 * dy1)*(dx2*dx2 + dy2 * dy2) + 1e-10);
 }
 
-int PomiarKarty::WykonajPomiar(Mat& image, vector<Point>& approx)
+int PomiarKarty::WykonajPomiar(Mat& image)
 {
-	// poprawienie detekcji krawedzi
+	// blur will enhance edge detection
 	Mat blurred(image);
 	medianBlur(image, blurred, 9);
 
 	Mat gray0(blurred.size(), CV_8U), gray;
 	vector<vector<Point> > contours;
 
-	//znalezienie kartki czesciowo przyslonietej
+	// find squares in every color plane of the image
 	for (int c = 0; c < 3; c++)
 	{
 		int ch[] = { c, 0 };
 		mixChannels(&blurred, 1, &gray0, 1, ch, 1);
 
-		//sprawdzenie roznych poziomow przyciemnienia kartki
+		// try several threshold levels
 		const int threshold_level = 2;
 		for (int l = 0; l < threshold_level; l++)
 		{
-			//wylapanie krawedzi przy roznych odcieniach kartki
+			// Use Canny instead of zero threshold level!
+			// Canny helps to catch squares with gradient shading
 			if (l == 0)
 			{
 				Canny(gray0, gray, 10, 20, 3); // 
 
-				// usuniete mozliwych "dziur" pomiedzy segmentami obrazu
+				// Dilate helps to remove potential holes between edge segments
 				dilate(gray, gray, Mat(), Point(-1, -1));
 			}
 			else
@@ -51,22 +52,30 @@ int PomiarKarty::WykonajPomiar(Mat& image, vector<Point>& approx)
 				gray = gray0 >= (l + 1) * 255 / threshold_level;
 			}
 
-			//znalezienie konturow kartki i zapis do listy
+			// Find contours and store them in a list
 			findContours(gray, contours, RETR_LIST, CHAIN_APPROX_SIMPLE);
-
-			// kontury
+			
+			// Test contours
 			for (size_t i = 0; i < contours.size(); i++)
 			{
-				approxPolyDP(Mat(contours[i]), approx, arcLength(Mat(contours[i]), true)*0.02, true);
+				// approximate contour with accuracy proportional
+				// to the contour perimeter
+				approxPolyDP(Mat(contours[i]), this->approx, arcLength(Mat(contours[i]), true)*0.02, true);
 
+				// Note: absolute value of an area is used because
+				// area may be positive or negative - in accordance with the
+				// contour orientation
 				if (this->approx.size() == 4 && fabs(contourArea(Mat(this->approx))) > 1000 && isContourConvex(Mat(this->approx)))
 				{
+			
 					double maxCosine = 0;
+
 					for (int j = 2; j < 5; j++)
 					{
 						double cosine = fabs(angle(this->approx[j % 4], this->approx[j - 2], this->approx[j - 1]));
 						maxCosine = MAX(maxCosine, cosine);
 					}
+
 					if (maxCosine < 0.3) {
 						int v3 = abs(this->approx[0].x - this->approx[2].x) + abs(this->approx[0].y - this->approx[2].y);
 						int v2 = abs(this->approx[0].x - this->approx[1].x) + abs(this->approx[0].y - this->approx[1].y);
@@ -81,7 +90,7 @@ int PomiarKarty::WykonajPomiar(Mat& image, vector<Point>& approx)
 
 void PomiarKarty::ZaznaczNaRamce(Mat & frame)
 {
-	if (approx.size() > 2) {
-		rectangle(frame, this->approx[0], this->approx[3], (0, 0, 0), 2, 8, 0);  // zaznaczenie karty na ramce
-	}
+  if (approx.size() > 2) {
+    rectangle(frame, this->approx[0], this->approx[2], (0, 0, 0), 2, 8, 0);  // zaznaczenie karty na ramce
+  }
 }
