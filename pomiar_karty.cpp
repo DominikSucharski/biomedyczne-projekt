@@ -9,7 +9,7 @@
 
 
 PomiarKarty::PomiarKarty() {}
-PomiarKarty::~PomiarKarty(){}
+PomiarKarty::~PomiarKarty() {}
 
 double angle(cv::Point pt1, cv::Point pt2, cv::Point pt0) {
 	double dx1 = pt1.x - pt0.x;
@@ -53,7 +53,7 @@ int PomiarKarty::WykonajPomiar(Mat& image, vector<Point>& approx)
 
 			//znalezienie konturow kartki i zapis do listy
 			findContours(gray, contours, RETR_LIST, CHAIN_APPROX_SIMPLE);
-			
+
 			// kontury
 			for (size_t i = 0; i < contours.size(); i++)
 			{
@@ -81,7 +81,7 @@ int PomiarKarty::WykonajPomiar(Mat& image, vector<Point>& approx)
 
 void PomiarKarty::ZaznaczNaRamce(Mat & frame)
 {
-  if (approx.size() > 2) {
-    rectangle(frame, this->approx[0], this->approx[3], (0, 0, 0), 2, 8, 0);  // zaznaczenie karty na ramce
-  }
+	if (approx.size() > 2) {
+		rectangle(frame, this->approx[0], this->approx[3], (0, 0, 0), 2, 8, 0);  // zaznaczenie karty na ramce
+	}
 }
