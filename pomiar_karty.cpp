@@ -90,7 +90,7 @@ int PomiarKarty::WykonajPomiar(Mat& image)
 
 void PomiarKarty::ZaznaczNaRamce(Mat & frame)
 {
-  if (approx.size() > 1) {
-    rectangle(frame, this->approx[0], this->approx[1], (0, 0, 0), 2, 8, 0);  // zaznaczenie karty na ramce
+  if (approx.size() > 2) {
+    rectangle(frame, this->approx[0], this->approx[2], (0, 0, 0), 2, 8, 0);  // zaznaczenie karty na ramce
   }
 }
